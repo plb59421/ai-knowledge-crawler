@@ -1,0 +1,18 @@
+[project]
+name = "ai-knowledge-crawler"
+version = "0.1.0"
+description = "AI前沿知识爬虫 - 定时从多个AI技术信息渠道自动抓取最前沿的AI领域知识与技术动态"
+requires-python = ">=3.11"
+dependencies = [
+    "scrapling[fetchers]>=0.4",
+    "pyyaml>=6.0",
+    "structlog>=23.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

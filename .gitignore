@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Project-specific
+.qoder/
+knowledge_base/by_source/
+knowledge_base/by_topic/
+knowledge_base/by_time/
+knowledge_base/index/
+knowledge_base/metadata/
+logs/
+
+# Secrets
+.env
+*.key
+*.pem
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store

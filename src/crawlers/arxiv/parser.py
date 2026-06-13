@@ -1,0 +1,50 @@
+"""ArXiv 论文内容解析器 - 从 API XML 数据解析为 Article"""
+
+from src.core.models import Article
+from src.utils.logger import get_logger
+
+logger = get_logger("parser.arxiv")
+
+
+class ArXivParser:
+    """解析 ArXiv API 返回的论文元数据"""
+
+    def parse(self, crawl_result) -> list[Article]:
+        url = crawl_result.url
+        raw_json = crawl_result.raw_json
+
+        # 如果有 JSON 数据（来自 API），直接提取
+        if raw_json and "arxiv_id" in raw_json:
+            arxiv_id = raw_json["arxiv_id"]
+            title = raw_json.get("title", "")
+            summary = raw_json.get("summary", "")
+            published = raw_json.get("published", "")
+            authors = raw_json.get("authors", [])
+            categories = raw_json.get("categories", [])
+            pdf_url = raw_json.get("pdf_url", "")
+
+            article_id = f"arx_{arxiv_id}"
+
+            logger.info(f"[arxiv] parsed paper: {title[:60]} ({len(categories)} categories)")
+
+            article = Article(
+                id=article_id,
+                source="arxiv",
+                title=title,
+                abstract=summary[:300],
+                full_text=summary,  # API 只返回 summary，PDF全文需单独下载
+                authors=authors,
+                publish_date=published[:10] if published else "",  # 截取日期部分
+                url=f"https://arxiv.org/abs/{arxiv_id}",
+                topics=categories,
+            )
+
+            # 如有 PDF URL，存入 metadata 方便后续下载
+            if pdf_url:
+                article.topics = categories + [f"pdf:{pdf_url}"]
+
+            return [article]
+
+        # 如果只有 HTML（来自解析失败的回退）
+        logger.warning(f"[arxiv] no JSON data in crawl_result, skipping: {url}")
+        return []

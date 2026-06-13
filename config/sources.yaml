@@ -1,0 +1,135 @@
+sources:
+  # === S级：原始研究发布 ===
+  arxiv:
+    display_name: "ArXiv AI Papers"
+    base_url: "https://export.arxiv.org/api/query"
+    schedule: "0 6 * * *"
+    fetcher_type: "Fetcher"
+    proxy_required: true
+    max_pages: 10
+    content_type: "json_xml"
+    pdf_download: true
+    categories: ["cs.AI", "cs.CL", "cs.LG"]
+
+  anthropic:
+    display_name: "Anthropic Research"
+    base_url: "https://www.anthropic.com/research"
+    schedule: "0 9 * * 1"
+    fetcher_type: "Fetcher"
+    proxy_required: true
+    max_pages: 5
+    content_type: "html"
+
+  openai:
+    display_name: "OpenAI Blog"
+    base_url: "https://openai.com/blog"
+    schedule: "0 9 * * *"
+    fetcher_type: "DynamicFetcher"
+    proxy_required: true
+    max_pages: 3
+    content_type: "html"
+
+  # === A级：高质量技术内容 ===
+  deepmind:
+    display_name: "DeepMind Blog"
+    base_url: "https://deepmind.google/blog/"
+    schedule: "0 10 * * *"
+    fetcher_type: "Fetcher"
+    proxy_required: true
+    max_pages: 5
+    content_type: "html"
+    stealthy_fallback: true
+
+  huggingface:
+    display_name: "HuggingFace Blog"
+    base_url: "https://huggingface.co/blog"
+    schedule: "0 8 * * *"
+    fetcher_type: "Fetcher"
+    proxy_required: true
+    max_pages: 5
+    content_type: "html"
+
+  hf_daily_papers:
+    display_name: "HuggingFace Daily Papers"
+    base_url: "https://huggingface.co/papers"
+    schedule: "30 6 * * *"
+    fetcher_type: "Fetcher"
+    proxy_required: true
+    max_pages: 3
+    content_type: "json_api"
+    api_endpoint: "https://huggingface.co/api/daily_papers"
+
+  semantic_scholar:
+    display_name: "Semantic Scholar"
+    base_url: "https://api.semanticscholar.org/graph/v1/paper/search"
+    schedule: "0 7 * * *"
+    fetcher_type: "Fetcher"
+    proxy_required: true
+    max_pages: 3
+    content_type: "json_api"
+
+  the_gradient:
+    display_name: "The Gradient"
+    base_url: "https://thegradient.pub"
+    schedule: "0 10 * * 1"
+    fetcher_type: "Fetcher"
+    proxy_required: true
+    max_pages: 3
+    content_type: "html"
+
+  # === B级：国内中文源 ===
+  jiqizhixin:
+    display_name: "机器之心"
+    base_url: "https://www.jiqizhixin.com/"
+    schedule: "0 9 * * *"
+    fetcher_type: "DynamicFetcher"
+    proxy_required: false
+    max_pages: 3
+    content_type: "html"
+
+  qbitai:
+    display_name: "量子位"
+    base_url: "https://www.qbitai.com/"
+    schedule: "30 8 * * *"
+    fetcher_type: "Fetcher"
+    proxy_required: false
+    max_pages: 5
+    content_type: "html"
+
+  baai_hub:
+    display_name: "智源社区"
+    base_url: "https://hub.baai.ac.cn/"
+    schedule: "0 10 * * *"
+    fetcher_type: "Fetcher"
+    proxy_required: false
+    max_pages: 3
+    content_type: "html"
+
+  # === B级：国际行业源 ===
+  google_ai:
+    display_name: "Google AI Blog"
+    base_url: "https://ai.googleblog.com/"
+    schedule: "0 11 * * 1"
+    fetcher_type: "Fetcher"
+    proxy_required: true
+    max_pages: 3
+    content_type: "html"
+
+  meta_ai:
+    display_name: "Meta AI Blog"
+    base_url: "https://ai.meta.com/blog/"
+    schedule: "0 11 * * 2"
+    fetcher_type: "Fetcher"
+    proxy_required: true
+    max_pages: 3
+    content_type: "html"
+
+  mit_tr_ai:
+    display_name: "MIT Technology Review (AI)"
+    base_url: "https://www.technologyreview.com/topic/artificial-intelligence/"
+    schedule: "0 11 * * 3"
+    fetcher_type: "Fetcher"
+    proxy_required: true
+    max_pages: 3
+    content_type: "html"
+    has_paywall: true

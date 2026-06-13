@@ -1,0 +1,18 @@
+project:
+  name: ai-knowledge-crawler
+  version: "0.1.0"
+  environment: development
+
+paths:
+  knowledge_base: knowledge_base
+  prompts: .qoder/prompts
+  config: config
+
+defaults:
+  language: zh-CN
+  default_relevance_threshold: 6.0
+
+llm:
+  provider: openai
+  model: gpt-4o
+  api_key_env: LLM_API_KEY
