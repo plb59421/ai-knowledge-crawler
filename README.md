@@ -24,7 +24,7 @@ scheduled crawler
 ## Modules
 
 ```text
-.qoder/                 AI 能力层：skills、prompts、knowledge
+.ai/                    AI 能力层：skills、prompts、knowledge、automation
 config/                 源配置、全局设置、日志配置
 scripts/                CLI 入口、每日任务、本地 API 启动、调度脚本
 src/ai/                 LLM client、mock client、结构化摘要器
@@ -92,6 +92,14 @@ python scripts/run_daily.py --group all --max-pages 5 --summarize --analysis-lim
 
 ```powershell
 python scripts/serve_api.py --host 127.0.0.1 --port 8000
+```
+
+导出自动化任务清单：
+
+```powershell
+python scripts/export_automation.py --format json
+python scripts/export_automation.py --format windows
+python scripts/export_automation.py --format cron
 ```
 
 启动前端：

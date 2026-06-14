@@ -5,7 +5,7 @@ project:
 
 paths:
   knowledge_base: knowledge_base
-  prompts: .qoder/prompts
+  prompts: .ai/prompts
   config: config
 
 defaults:

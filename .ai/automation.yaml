@@ -1,0 +1,101 @@
+version: 1
+project:
+  name: ai-knowledge-crawler
+  description: Daily AI knowledge crawler, analysis, storage, and report API.
+  root: "."
+  python: python
+
+defaults:
+  timezone: Asia/Shanghai
+  shell: powershell
+  env_file: config/user.yaml
+  log_dir: logs
+
+tasks:
+  - id: daily-domestic-ingest
+    title: Daily domestic and API sources ingest
+    description: Crawl no-proxy sources, run AI analysis, tag, rank, and store articles.
+    schedule:
+      type: cron
+      expression: "0 7 * * *"
+      timezone: Asia/Shanghai
+    command:
+      cwd: "."
+      args:
+        - python
+        - scripts/run_daily.py
+        - --group
+        - domestic
+        - --max-pages
+        - "5"
+        - --summarize
+    requires:
+      config:
+        - config/user.yaml
+      secrets:
+        - llm.api_key
+    outputs:
+      - knowledge_base/by_source
+      - knowledge_base/metadata/crawl_history.json
+
+  - id: daily-proxy-ingest
+    title: Daily proxy sources ingest
+    description: Crawl proxy-required sources, run AI analysis, tag, rank, and store articles.
+    schedule:
+      type: cron
+      expression: "30 7 * * *"
+      timezone: Asia/Shanghai
+    command:
+      cwd: "."
+      args:
+        - python
+        - scripts/run_daily.py
+        - --group
+        - proxy
+        - --max-pages
+        - "3"
+        - --summarize
+    requires:
+      config:
+        - config/user.yaml
+      secrets:
+        - llm.api_key
+      runtime:
+        - proxy.enabled=true or proxy.url configured
+    outputs:
+      - knowledge_base/by_source
+      - knowledge_base/metadata/crawl_history.json
+
+  - id: local-report-api
+    title: Local report API
+    description: Serve the local API that reads knowledge_base in real time for the web UI.
+    schedule:
+      type: manual
+    command:
+      cwd: "."
+      args:
+        - python
+        - scripts/serve_api.py
+    requires:
+      config:
+        - config/user.yaml
+    outputs:
+      - http://127.0.0.1:8000/api/report
+
+  - id: report-web-dev
+    title: Report web UI
+    description: Start the Vite report UI and proxy API requests to the local report API.
+    schedule:
+      type: manual
+    command:
+      cwd: web/report
+      args:
+        - npm
+        - run
+        - dev
+    requires:
+      commands:
+        - npm install
+        - python scripts/serve_api.py
+    outputs:
+      - http://127.0.0.1:5173

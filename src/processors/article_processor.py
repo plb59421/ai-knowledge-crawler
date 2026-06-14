@@ -31,7 +31,7 @@ class ArticleProcessor:
         self.summary_template = self._load_summary_template() if summarize else ""
 
     def _load_summary_template(self) -> str:
-        template_path = PROJECT_ROOT / ".qoder" / "prompts" / "summarize.st"
+        template_path = PROJECT_ROOT / ".ai" / "prompts" / "summarize.st"
         if not template_path.exists():
             return ""
         return template_path.read_text(encoding="utf-8")

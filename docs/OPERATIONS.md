@@ -68,6 +68,21 @@ Notes:
 - Existing articles are skipped by default.
 - `--force-analyze` updates existing records, useful for backfill.
 
+## Automation Manifest
+
+The tool-neutral automation manifest is `.ai/automation.yaml`.
+
+Export it for an external AI tool or scheduler:
+
+```powershell
+python scripts/export_automation.py --format json
+python scripts/export_automation.py --format markdown
+python scripts/export_automation.py --format cron
+python scripts/export_automation.py --format windows
+```
+
+Generated exports are derived from the manifest. Edit `.ai/automation.yaml` first when schedule definitions change.
+
 ## Web Runtime
 
 Start API:

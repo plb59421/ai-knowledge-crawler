@@ -1,70 +1,73 @@
 # Project Modules
 
-本文档定义项目的模块边界，后续修改时优先按模块定位，不跨层随意耦合。
+This document defines module boundaries for future AI-assisted changes.
 
 ## AI Capability Layer
 
-位置：`.qoder/`
+Location: `.ai/`
 
-- `prompts/`: 模型提示词模板，当前主模板为 `summarize.st`。
-- `skills/`: 项目级操作指南，用于指导信息源接入、解析器验证、AI 摘要和知识整理。
-- `knowledge/`: 领域知识、信息源画像、可信度规则、主题分类体系。
+- `prompts/`: Runtime prompt templates. Current main template: `summarize.st`.
+- `skills/`: Tool-neutral project workflows for source onboarding, parser validation, content summarization, and knowledge curation.
+- `knowledge/`: Topic taxonomy, source trust policy, source profiles, and safety rules.
+- `automation.yaml`: Canonical automation task definitions for scheduled ingestion and local report services.
+- `PROJECT.md`: Rules for keeping this directory tool-neutral.
 
-约束：
+Constraints:
 
-- prompt 只定义输入输出和分析要求，不写业务存储逻辑。
-- skill 只描述流程和检查标准，不包含真实密钥。
-- knowledge 文档用于指导策略，不作为运行时唯一事实来源。
+- Store no API keys, cookies, tokens, or private credentials.
+- Keep tool-specific generated files outside `.ai/` unless they are regenerated from `automation.yaml`.
+- Runtime secrets belong in `config/user.yaml`.
 
 ## Engineering Layer
 
-位置：`src/`
+Location: `src/`
 
-- `core/`: 数据模型、异常、crawler registry。
-- `crawlers/`: 每个信息源独立目录，包含 `crawler.py` 和 `parser.py`。
-- `ai/`: OpenAI-compatible client、mock client、结构化摘要器。
-- `processors/`: 清洗、文档处理、文章后处理。
-- `ranking/`: 中文标签、分类型评分、时效过滤、报告 payload 构建。
-- `storage/`: 文件知识库存储、去重、索引、更新和历史记录。
-- `utils/`: 配置、日志、代理等基础工具。
-- `web_api/`: FastAPI API，实时读取 `knowledge_base` 并返回前端数据。
+- `core/`: `Article`, `CrawlResult`, registry, and shared exceptions.
+- `crawlers/`: One directory per source, with crawler and parser implementations.
+- `ai/`: OpenAI-compatible client, mock client, and structured summarizer.
+- `processors/`: HTML, document, and article post-processing.
+- `ranking/`: Chinese tags, profile-specific scoring, freshness filtering, and report payload construction.
+- `storage/`: File knowledge base writes, deduplication, indexes, updates, and history.
+- `utils/`: Configuration, logging, and proxy helpers.
+- `web_api/`: FastAPI API that reads `knowledge_base` in real time.
 
-约束：
+Constraints:
 
-- crawler 只负责抓取原始内容，parser 只负责转换为 `Article`。
-- AI 分析只在爬虫任务中执行，Web API 不触发模型调用。
-- `KnowledgeStore` 是写入知识库的唯一入口。
-- Web API 复用 `ReportDataExporter.build_payload()`，不另写排序规则。
+- Crawlers fetch raw content; parsers convert raw content into `Article`.
+- AI analysis runs during crawl jobs, not during Web access.
+- `KnowledgeStore` is the write entry point for stored articles.
+- Web API must reuse existing report query/export logic and avoid duplicate ranking rules.
 
 ## Entry Points
 
-位置：`scripts/`
+Location: `scripts/`
 
-- `run_crawler.py`: 手动单源/多源抓取。
-- `run_daily.py`: 定时任务入口，按 domestic/proxy/all 分组执行。
-- `generate_report.py`: 兼容导出静态 report JSON。
-- `serve_api.py`: 本地 FastAPI 服务入口。
-- `schedule_windows.ps1`: Windows Task Scheduler 创建脚本。
-- `local_test.py`: 本地 fixture 流水线测试。
+- `run_crawler.py`: Manual single-source or multi-source crawler.
+- `run_daily.py`: Scheduled grouped crawler for `domestic`, `proxy`, or `all`.
+- `serve_api.py`: Local FastAPI service.
+- `generate_report.py`: Compatibility static report data export.
+- `export_automation.py`: Converts `.ai/automation.yaml` to JSON, Markdown, cron, or Windows scheduler commands.
+- `schedule_windows.ps1`: Legacy Windows Task Scheduler helper.
+- `local_test.py`: Local fixture pipeline.
 
 ## Web Layer
 
-位置：`web/report/`
+Location: `web/report/`
 
-- Vite + TypeScript 前端。
-- 默认请求 `/api/report`。
-- 静态 JSON fallback 仅用于离线预览。
-- 页面只展示两个榜单：`技术资讯` 和 `学术论文`。
+- Vite + TypeScript report UI.
+- Requests `/api/report` first.
+- Static JSON fallback is only for offline preview.
+- The UI shows two sections: `技术资讯` and `学术论文`.
 
 ## Runtime Data
 
-位置：`knowledge_base/`
+Location: `knowledge_base/`
 
-- `by_source/`: 主存储。
-- `by_time/`: 时间视图。
-- `by_topic/`: 主题视图。
-- `index/`: URL、去重、全文索引。
-- `metadata/`: crawl history、daily report。
-- `exports/`: 静态兼容导出和前端构建产物。
+- `by_source/`: Primary article storage.
+- `by_time/`: Time view.
+- `by_topic/`: Topic view.
+- `index/`: URL index, dedup records, and search indexes.
+- `metadata/`: Crawl history and daily reports.
+- `exports/`: Compatibility exports and frontend build output.
 
-默认不提交运行时数据。需要分享样例时应放入 `tests/fixtures/`。
+Runtime data is ignored by Git. Share stable examples through `tests/fixtures/`.

@@ -25,7 +25,7 @@ Acceptance:
 
 Touch points:
 
-- `.qoder/prompts/summarize.st`
+- `.ai/prompts/summarize.st`
 - `src/ai/summarizer.py`
 - `src/core/models.py` if schema changes are required
 - `tests/test_ai_and_documents.py`

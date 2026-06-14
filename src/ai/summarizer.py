@@ -23,7 +23,7 @@ class ArticleSummarizer:
         max_input_chars: int = 12000,
     ):
         self.client = client
-        self.template_path = template_path or PROJECT_ROOT / ".qoder" / "prompts" / "summarize.st"
+        self.template_path = template_path or PROJECT_ROOT / ".ai" / "prompts" / "summarize.st"
         self.max_length = max_length
         self.language = language
         self.max_input_chars = max_input_chars
