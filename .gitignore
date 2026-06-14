@@ -4,6 +4,8 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+!desktop_app/build/
+!desktop_app/build/.gitkeep
 .venv/
 venv/
 
@@ -20,6 +22,17 @@ knowledge_base/exports/
 logs/
 .pytest_cache/
 **/__pycache__/
+
+# Desktop app build outputs
+desktop_app/**/dist/
+desktop_app/**/target/
+desktop_app/**/build/*
+!desktop_app/build/.gitkeep
+desktop_app/**/.venv/
+desktop_app/**/*.exe
+desktop_app/**/*.msi
+desktop_app/**/*.dmg
+desktop_app/**/*.AppImage
 
 # Secrets
 .env

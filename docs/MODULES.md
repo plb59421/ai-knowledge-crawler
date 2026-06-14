@@ -65,6 +65,15 @@
 - 静态 JSON 仅作为离线 fallback。
 - 页面只展示两个榜单：`技术资讯` 和 `学术论文`。
 
+### 桌面应用层
+
+位置：`desktop_app/`
+
+- EXE 桌面应用的隔离工作区。
+- 用于存放未来 Tauri 桌面壳、Python sidecar、安装资源和发布文档。
+- 不迁移或复制主项目的 `src/`、`scripts/`、`web/report/`。
+- 不提交真实用户配置、知识库、日志或安装产物。
+
 ### 运行时数据
 
 位置：`knowledge_base/`
@@ -140,6 +149,15 @@ Location: `web/report/`
 - Requests `/api/report` by default.
 - Static JSON is only an offline fallback.
 - The UI shows two lists: `技术资讯` and `学术论文`.
+
+### Desktop App Layer
+
+Location: `desktop_app/`
+
+- Isolated workspace for the EXE desktop application.
+- Stores future Tauri shell files, Python sidecar files, installer resources, and release docs.
+- Does not move or duplicate root-level `src/`, `scripts/`, or `web/report/`.
+- Does not commit real user config, knowledge base data, logs, or installer artifacts.
 
 ### Runtime Data
 

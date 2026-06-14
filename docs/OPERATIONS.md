@@ -89,6 +89,16 @@ python scripts/export_automation.py --format windows
 
 调度定义应优先修改 `.ai/automation.yaml`，再重新导出。
 
+### 桌面应用工作区
+
+EXE 桌面应用相关文件隔离在 `desktop_app/`。当前主项目运行方式不变，桌面打包设计、发布和资源说明见：
+
+```text
+desktop_app/README.md
+desktop_app/docs/PACKAGING.md
+desktop_app/docs/RELEASE.md
+```
+
 ### Web 运行
 
 启动 API：
@@ -227,6 +237,16 @@ python scripts/export_automation.py --format windows
 ```
 
 Edit `.ai/automation.yaml` first when schedule definitions change, then export again.
+
+### Desktop App Workspace
+
+EXE desktop app files are isolated under `desktop_app/`. Current project runtime commands remain unchanged. Desktop packaging design, release notes, and resource boundaries are documented in:
+
+```text
+desktop_app/README.md
+desktop_app/docs/PACKAGING.md
+desktop_app/docs/RELEASE.md
+```
 
 ### Web Runtime
 
