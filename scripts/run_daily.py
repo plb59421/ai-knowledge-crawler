@@ -13,6 +13,7 @@ from src.ai.summarizer import ArticleSummarizer
 from src.processors.article_processor import ArticleProcessor
 from src.ranking.report_data import ReportDataExporter
 from src.storage.knowledge_store import KnowledgeStore
+from src.utils.config_loader import get_runtime_config
 from src.utils.logger import get_logger
 
 logger = get_logger("run_daily")
@@ -85,6 +86,8 @@ def run_group(
 
 
 def main():
+    runtime_config = get_runtime_config()
+    default_analysis_limit = int(runtime_config.get("default_analysis_limit", 10))
     parser = argparse.ArgumentParser(description="Run daily AI knowledge crawler source groups")
     parser.add_argument("--group", choices=["domestic", "proxy", "all"], default="domestic")
     parser.add_argument("--max-pages", type=int, default=None)
@@ -99,7 +102,7 @@ def main():
     parser.add_argument("--general-valid-days", type=int, default=30)
     parser.add_argument("--academic-valid-days", type=int, default=90)
     parser.add_argument("--include-expired", action="store_true")
-    parser.add_argument("--analysis-limit", type=int, default=10)
+    parser.add_argument("--analysis-limit", type=int, default=default_analysis_limit)
     parser.add_argument("--force-analyze", action="store_true")
     parser.set_defaults(no_html_report=False)
     args = parser.parse_args()

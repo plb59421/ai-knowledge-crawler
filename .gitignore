@@ -25,6 +25,7 @@ logs/
 .env
 .env.*
 !.env.example
+config/user.yaml
 *.key
 *.pem
 

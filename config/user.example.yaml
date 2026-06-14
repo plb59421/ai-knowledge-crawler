@@ -1,0 +1,25 @@
+# Copy this file to config/user.yaml and fill in local-only values.
+# config/user.yaml is ignored by Git.
+
+llm:
+  # Qwen / DashScope OpenAI-compatible endpoint.
+  provider: qwen
+  api_key: "your_dashscope_api_key_here"
+  model: qwen-plus
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+  timeout: 60
+
+proxy:
+  # Set enabled=false if you never want the project to use a proxy.
+  enabled: true
+  # Optional explicit proxy URL. Leave empty to auto-detect local ports.
+  url: ""
+  auto_detect: true
+  host: 127.0.0.1
+  ports: [7899, 7897, 7898]
+
+runtime:
+  default_analysis_limit: 10
+  api_host: 127.0.0.1
+  api_port: 8000
+  frontend_port: 5173

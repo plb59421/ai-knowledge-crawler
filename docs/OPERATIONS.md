@@ -15,15 +15,31 @@ cd web/report
 npm install
 ```
 
-LLM:
+Local user config:
 
 ```powershell
-$env:DASHSCOPE_API_KEY="your_dashscope_api_key"
-$env:OPENAI_BASE_URL="https://dashscope.aliyuncs.com/compatible-mode/v1"
-$env:LLM_MODEL="qwen-plus"
+Copy-Item config/user.example.yaml config/user.yaml
 ```
 
-Never commit real API keys.
+Fill `config/user.yaml` with local-only values:
+
+```yaml
+llm:
+  api_key: "your_dashscope_api_key"
+  model: qwen-plus
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+
+proxy:
+  enabled: true
+  url: ""
+
+runtime:
+  default_analysis_limit: 10
+  api_host: 127.0.0.1
+  api_port: 8000
+```
+
+`config/user.yaml` is ignored by Git. Never commit real API keys.
 
 ## Daily Run
 

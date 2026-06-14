@@ -51,15 +51,22 @@ cd web/report
 npm install
 ```
 
-配置千问 API：
+复制本地用户配置并填写千问 API、代理和运行端口：
 
 ```powershell
-$env:DASHSCOPE_API_KEY="your_dashscope_api_key"
-$env:OPENAI_BASE_URL="https://dashscope.aliyuncs.com/compatible-mode/v1"
-$env:LLM_MODEL="qwen-plus"
+Copy-Item config/user.example.yaml config/user.yaml
 ```
 
-也可以把这些变量配置到用户环境变量中。不要把真实 key 写入仓库。
+然后编辑 `config/user.yaml`：
+
+```yaml
+llm:
+  api_key: "your_dashscope_api_key"
+  model: qwen-plus
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+```
+
+`config/user.yaml` 已被 Git 忽略，不要把真实 key 写入其它仓库文件。`.env.example` 仅保留为兼容旧环境变量的示例。
 
 ## Run
 

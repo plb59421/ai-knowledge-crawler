@@ -74,6 +74,41 @@ def test_openai_client_prefers_dashscope_env(monkeypatch):
     assert client.base_url == "https://dashscope.aliyuncs.com/compatible-mode/v1"
 
 
+def test_openai_client_reads_user_config(tmp_path, monkeypatch):
+    config_dir = tmp_path / "config"
+    config_dir.mkdir()
+    (config_dir / "settings.yaml").write_text("llm:\n  model: default-model\n", encoding="utf-8")
+    (config_dir / "user.yaml").write_text(
+        "\n".join([
+            "llm:",
+            "  api_key: user-config-key",
+            "  model: qwen-plus",
+            "  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1",
+            "  timeout: 42",
+        ]),
+        encoding="utf-8",
+    )
+    monkeypatch.delenv("DASHSCOPE_API_KEY", raising=False)
+    monkeypatch.delenv("LLM_API_KEY", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("LLM_MODEL", raising=False)
+    monkeypatch.delenv("OPENAI_BASE_URL", raising=False)
+    monkeypatch.delenv("LLM_BASE_URL", raising=False)
+    monkeypatch.delenv("LLM_TIMEOUT", raising=False)
+
+    from src.utils import config_loader
+
+    monkeypatch.setattr(config_loader, "CONFIG_ROOT", config_dir)
+    config_loader.load_settings_config.cache_clear()
+    config_loader.load_user_config.cache_clear()
+
+    client = OpenAIClient()
+
+    assert client.api_key == "user-config-key"
+    assert client.model == "qwen-plus"
+    assert client.timeout == 42
+
+
 def test_document_processor_html_and_text(tmp_path):
     html_path = tmp_path / "sample.html"
     html_path.write_text("<html><body><h1>Title</h1><p>Body text</p></body></html>", encoding="utf-8")

@@ -21,24 +21,25 @@ class OpenAIClient:
         api_key_env = config.get("api_key_env", "DASHSCOPE_API_KEY")
         self.api_key = (
             api_key
+            or config.get("api_key")
             or os.environ.get("DASHSCOPE_API_KEY")
             or os.environ.get(api_key_env, "")
             or os.environ.get("LLM_API_KEY")
             or os.environ.get("OPENAI_API_KEY")
         )
-        self.model = model or os.environ.get("LLM_MODEL") or config.get("model") or "qwen-plus"
+        self.model = model or config.get("model") or os.environ.get("LLM_MODEL") or "qwen-plus"
         self.base_url = (
             base_url
+            or config.get("base_url")
             or os.environ.get("OPENAI_BASE_URL")
             or os.environ.get("LLM_BASE_URL")
-            or config.get("base_url")
             or "https://dashscope.aliyuncs.com/compatible-mode/v1"
         ).rstrip("/")
-        self.timeout = int(os.environ.get("LLM_TIMEOUT") or config.get("timeout") or timeout)
+        self.timeout = int(config.get("timeout") or os.environ.get("LLM_TIMEOUT") or timeout)
 
     def complete(self, prompt: str) -> str:
         if not self.api_key:
-            raise RuntimeError("missing DASHSCOPE_API_KEY, LLM_API_KEY, or OPENAI_API_KEY")
+            raise RuntimeError("missing llm.api_key in config/user.yaml or compatible env var")
 
         response = requests.post(
             f"{self.base_url}/chat/completions",

@@ -17,7 +17,7 @@ from src.ai.openai_client import OpenAIClient
 from src.ai.summarizer import ArticleSummarizer
 from src.processors.article_processor import ArticleProcessor
 from src.ranking.report_data import ReportDataExporter
-from src.utils.config_loader import get_source_config
+from src.utils.config_loader import get_runtime_config, get_source_config
 from src.utils.logger import get_logger
 
 logger = get_logger("run_crawler")
@@ -108,6 +108,8 @@ def crawl_source(
 
 
 def main():
+    runtime_config = get_runtime_config()
+    default_analysis_limit = int(runtime_config.get("default_analysis_limit", 10))
     parser = argparse.ArgumentParser(description="AI前沿知识爬虫 - 手动爬取")
     parser.add_argument("--source", help="指定信息源名称 (可多个，逗号分隔)")
     parser.add_argument("--all", action="store_true", help="爬取所有已注册的信息源")
@@ -128,7 +130,7 @@ def main():
     parser.add_argument("--general-valid-days", type=int, default=30, help="技术资讯时效天数")
     parser.add_argument("--academic-valid-days", type=int, default=90, help="学术论文时效天数")
     parser.add_argument("--include-expired", action="store_true", help="HTML 报告包含过期内容")
-    parser.add_argument("--analysis-limit", type=int, default=10, help="Max AI analyses per run")
+    parser.add_argument("--analysis-limit", type=int, default=default_analysis_limit, help="Max AI analyses per run")
     parser.add_argument("--force-analyze", action="store_true", help="Run AI analysis even when an article already exists")
     args = parser.parse_args()
 

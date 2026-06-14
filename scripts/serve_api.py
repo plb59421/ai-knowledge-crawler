@@ -9,11 +9,14 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 import uvicorn
 
+from src.utils.config_loader import get_runtime_config
+
 
 def main():
+    runtime_config = get_runtime_config()
     parser = argparse.ArgumentParser(description="Serve AI knowledge crawler API")
-    parser.add_argument("--host", default="127.0.0.1")
-    parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument("--host", default=runtime_config.get("api_host", "127.0.0.1"))
+    parser.add_argument("--port", type=int, default=int(runtime_config.get("api_port", 8000)))
     parser.add_argument("--reload", action="store_true")
     args = parser.parse_args()
 

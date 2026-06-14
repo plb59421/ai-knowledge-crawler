@@ -18,3 +18,16 @@ llm:
   base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
   api_key_env: DASHSCOPE_API_KEY
   timeout: 60
+
+proxy:
+  enabled: true
+  url: ""
+  auto_detect: true
+  host: 127.0.0.1
+  ports: [7899, 7897, 7898]
+
+runtime:
+  default_analysis_limit: 10
+  api_host: 127.0.0.1
+  api_port: 8000
+  frontend_port: 5173
