@@ -1,15 +1,23 @@
 ---
 name: knowledge-curation
 description: |
-  将抓取文章整理为多视图知识库，覆盖来源归档、时间归档、主题归档、索引、去重和人工阅读版导出。
+  Organize crawled articles into a multi-view file knowledge base with source
+  archives, time views, topic views, indexes, deduplication, and readable exports.
 when_to_use: |
-  当需要整理、去重、索引、导出、迁移或复核知识库内容时使用。
+  Use when organizing, deduplicating, indexing, exporting, migrating, or reviewing
+  knowledge base content.
 disable-model-invocation: true
 user-invocable: true
 allowed-tools: ["python"]
 ---
 
 # Knowledge Curation
+
+[中文](#中文) | [English](#english)
+
+---
+
+## 中文
 
 知识库整理规则：
 
@@ -19,5 +27,34 @@ allowed-tools: ["python"]
 4. `by_time` 和 `by_topic` 是派生视图。
 5. `index/url_index.json` 用于 URL 查重和定位。
 6. `metadata/dedup_records.json` 用于标题级去重。
-7. Markdown 导出用于人工阅读，不作为主数据源。
-8. 旧索引结构不符合预期时应记录错误并安全重建。
+7. Markdown 或 HTML 导出用于人工阅读，不作为主数据源。
+8. 索引结构异常时应记录错误并安全重建。
+
+验证重点：
+
+```powershell
+pytest tests/test_models_storage_registry.py
+pytest tests/test_report_data.py
+```
+
+---
+
+## English
+
+Knowledge base curation rules:
+
+1. URL is the primary deduplication key.
+2. `source + title` is the secondary deduplication key.
+3. `by_source` is the canonical storage path.
+4. `by_time` and `by_topic` are derived views.
+5. `index/url_index.json` is used for URL lookup and deduplication.
+6. `metadata/dedup_records.json` is used for title-level deduplication.
+7. Markdown or HTML exports are for human reading, not canonical storage.
+8. Unexpected index structures should be logged and safely rebuilt.
+
+Validation focus:
+
+```powershell
+pytest tests/test_models_storage_registry.py
+pytest tests/test_report_data.py
+```

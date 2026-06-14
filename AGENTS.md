@@ -1,66 +1,63 @@
-# ai_knowledge_crawler
+# AI Knowledge Crawler Agent Guide
 
-AI 前沿知识爬虫，用于定时从多个 AI 技术信息渠道抓取内容，经过 AI 整理、中文标签、评分排序后写入本地知识库，并由 Web API 实时读库展示。
+[中文](#中文) | [English](#english)
 
-## Architecture
+---
 
-项目采用两层结构：
+## 中文
 
-1. **AI 能力层**：`.ai/`
-   - `prompts/`: 运行时提示词模板，例如 `summarize.st`
-   - `skills/`: 项目级工作流说明，例如信息源接入、解析验证、知识整理
-   - `knowledge/`: 来源画像、可信度规范、主题分类、安全规范
-   - `automation.yaml`: 工具中立的自动化任务清单
-2. **工程能力层**：`src/`
-   - 爬虫、解析器、AI 分析、后处理、评分排序、存储、Web API
+### 项目定位
 
-## Important Paths
+本项目用于定时抓取 AI 前沿内容，完成 AI 整理、中文标签、评分排序、知识库存储，并通过本地 Web API 实时展示。
+
+### 两层架构
+
+- AI 能力层：`.ai/`
+  - `prompts/`: 提示词模板
+  - `skills/`: 项目级工作流说明
+  - `knowledge/`: 来源画像、主题分类、可信度和安全规范
+  - `automation.yaml`: 工具中立的自动化任务清单
+- 工程能力层：`src/`
+  - 爬虫、解析、AI 分析、后处理、评分、存储、Web API
+
+### 关键路径
 
 ```text
-.ai/                         Tool-neutral AI project assets
-config/settings.yaml          Non-secret defaults
-config/user.example.yaml      Local configuration template
-config/user.yaml              Local private config, ignored by Git
-config/sources.yaml           Source definitions
-src/                          Runtime source code
-scripts/run_crawler.py        Manual crawl entry point
-scripts/run_daily.py          Grouped scheduled crawl entry point
-scripts/serve_api.py          Local report API entry point
-scripts/export_automation.py  Export automation definitions
-web/report/                   Vite + TypeScript report UI
-knowledge_base/               Runtime knowledge base, ignored by Git
-logs/                         Runtime logs, ignored by Git
+.ai/                         AI 项目资产
+config/user.example.yaml      本地配置模板
+config/user.yaml              本地私有配置，禁止提交
+config/sources.yaml           信息源配置
+scripts/run_crawler.py        手动爬取入口
+scripts/run_daily.py          定时任务入口
+scripts/serve_api.py          本地 API 入口
+scripts/export_automation.py  自动化清单导出
+web/report/                   Vite 报告前端
+knowledge_base/               运行时知识库，默认不提交
 ```
 
-## Runtime Flow
+### 运行链路
 
 ```text
-scheduled crawler
+定时爬虫
   -> crawler / parser
   -> AI analysis
-  -> auto-tag + rank
+  -> tag + rank
   -> KnowledgeStore
   -> FastAPI /api/report
   -> Web UI
 ```
 
-Web access must read from `knowledge_base`; it must not call an LLM.
+Web 访问只能读取 `knowledge_base`，不得触发模型调用。
 
-## Local Configuration
-
-Copy the template and fill local-only values:
+### 本地配置
 
 ```powershell
 Copy-Item config/user.example.yaml config/user.yaml
 ```
 
-Never commit real API keys, tokens, cookies, logs, generated knowledge base data, `node_modules`, or build output.
+不要提交 API Key、Cookie、Token、日志、运行时知识库、`node_modules` 或构建产物。
 
-## Automation
-
-The canonical automation definition is `.ai/automation.yaml`.
-
-Export it for external schedulers or AI tools:
+### 自动化入口
 
 ```powershell
 python scripts/export_automation.py --format json
@@ -69,16 +66,7 @@ python scripts/export_automation.py --format cron
 python scripts/export_automation.py --format windows
 ```
 
-Daily crawler commands:
-
-```powershell
-python scripts/run_daily.py --group domestic --max-pages 5 --summarize
-python scripts/run_daily.py --group proxy --max-pages 3 --summarize
-```
-
-## Validation
-
-Run before committing:
+### 验证命令
 
 ```powershell
 python -m compileall -q src scripts
@@ -87,11 +75,89 @@ cd web/report
 npm.cmd run build
 ```
 
-## Change Guardrails
+### 修改边界
 
-- Keep crawler and parser changes isolated per source.
-- Prefer fixture tests over live network tests.
-- Keep academic and general ranking profiles separate.
-- Keep labels in Chinese or common AI abbreviations.
-- Use `KnowledgeStore` as the write entry point for stored articles.
-- Keep `.ai/` tool-neutral; do not put tool-specific secrets or generated runtime data there.
+- 新信息源改动应集中在 `config/sources.yaml`、`src/crawlers/<source>/`、注册文件和 fixture 测试。
+- AI 分析改动应集中在 `.ai/prompts/`、`src/ai/`、`src/core/models.py` 和相关测试。
+- 标签与评分改动应集中在 `src/ranking/`。
+- Web 展示不得调用 LLM，只能通过 API 读取知识库。
+
+---
+
+## English
+
+### Project Purpose
+
+This project periodically collects frontier AI content, runs AI-assisted analysis, applies Chinese tags, ranks articles, stores them in a local knowledge base, and serves them through a local Web API.
+
+### Two-Layer Architecture
+
+- AI capability layer: `.ai/`
+  - `prompts/`: Prompt templates
+  - `skills/`: Project workflow instructions
+  - `knowledge/`: Source profiles, topic taxonomy, trust rules, and safety rules
+  - `automation.yaml`: Tool-neutral automation manifest
+- Engineering layer: `src/`
+  - Crawlers, parsers, AI analysis, post-processing, ranking, storage, and Web API
+
+### Important Paths
+
+```text
+.ai/                         AI project assets
+config/user.example.yaml      Local configuration template
+config/user.yaml              Local private config, never commit
+config/sources.yaml           Source configuration
+scripts/run_crawler.py        Manual crawler entry point
+scripts/run_daily.py          Scheduled crawler entry point
+scripts/serve_api.py          Local API entry point
+scripts/export_automation.py  Automation manifest exporter
+web/report/                   Vite report UI
+knowledge_base/               Runtime knowledge base, ignored by Git
+```
+
+### Runtime Flow
+
+```text
+scheduled crawler
+  -> crawler / parser
+  -> AI analysis
+  -> tag + rank
+  -> KnowledgeStore
+  -> FastAPI /api/report
+  -> Web UI
+```
+
+Web access must only read from `knowledge_base`; it must not invoke an LLM.
+
+### Local Configuration
+
+```powershell
+Copy-Item config/user.example.yaml config/user.yaml
+```
+
+Never commit API keys, cookies, tokens, logs, runtime knowledge base data, `node_modules`, or build artifacts.
+
+### Automation Entry Point
+
+```powershell
+python scripts/export_automation.py --format json
+python scripts/export_automation.py --format markdown
+python scripts/export_automation.py --format cron
+python scripts/export_automation.py --format windows
+```
+
+### Validation Commands
+
+```powershell
+python -m compileall -q src scripts
+pytest
+cd web/report
+npm.cmd run build
+```
+
+### Change Boundaries
+
+- New source changes should stay around `config/sources.yaml`, `src/crawlers/<source>/`, registry wiring, and fixture tests.
+- AI analysis changes should stay around `.ai/prompts/`, `src/ai/`, `src/core/models.py`, and related tests.
+- Tagging and ranking changes should stay in `src/ranking/`.
+- The Web UI must not call an LLM; it should read the knowledge base through the API.
