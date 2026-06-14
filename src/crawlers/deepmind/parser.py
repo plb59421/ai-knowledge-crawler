@@ -24,9 +24,9 @@ class DeepMindParser:
             title = url.split("/")[-1]
 
         content_parts = []
-        for p in soup.select("article p, div.prose p, .blog-content p"):
+        for p in soup.select("main p, section p, article p, div.prose p, .blog-content p, p"):
             text = p.get_text(strip=True)
-            if text and len(text) > 15:
+            if text and len(text) > 15 and text not in content_parts:
                 content_parts.append(text)
 
         date = ""
@@ -42,7 +42,8 @@ class DeepMindParser:
 
         abstract = content_parts[0][:300] if content_parts else ""
         full_text = "\n".join(content_parts)
-        article_id = f"dm_{url.split('/')[-1]}"
+        slug = url.rstrip("/").split("/")[-1] or abs(hash(url))
+        article_id = f"dm_{slug}"
 
         logger.info(f"[deepmind] parsed: {title[:50]} ({len(content_parts)} paragraphs)")
 

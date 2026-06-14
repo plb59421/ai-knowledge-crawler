@@ -5,7 +5,7 @@ sources:
     base_url: "https://export.arxiv.org/api/query"
     schedule: "0 6 * * *"
     fetcher_type: "Fetcher"
-    proxy_required: true
+    proxy_required: false
     max_pages: 10
     content_type: "json_xml"
     pdf_download: true
@@ -22,7 +22,7 @@ sources:
 
   openai:
     display_name: "OpenAI Blog"
-    base_url: "https://openai.com/blog"
+    base_url: "https://openai.com/news/"
     schedule: "0 9 * * *"
     fetcher_type: "DynamicFetcher"
     proxy_required: true
@@ -68,14 +68,23 @@ sources:
     max_pages: 3
     content_type: "json_api"
 
+  openalex:
+    display_name: "OpenAlex"
+    base_url: "https://api.openalex.org/works"
+    schedule: "10 7 * * *"
+    fetcher_type: "Fetcher"
+    proxy_required: false
+    max_pages: 10
+    content_type: "json_api"
+
   the_gradient:
     display_name: "The Gradient"
-    base_url: "https://thegradient.pub"
+    base_url: "https://thegradientpub.substack.com/api/v1/archive"
     schedule: "0 10 * * 1"
     fetcher_type: "Fetcher"
-    proxy_required: true
+    proxy_required: false
     max_pages: 3
-    content_type: "html"
+    content_type: "json_api"
 
   # === B级：国内中文源 ===
   jiqizhixin:
@@ -108,7 +117,7 @@ sources:
   # === B级：国际行业源 ===
   google_ai:
     display_name: "Google AI Blog"
-    base_url: "https://ai.googleblog.com/"
+    base_url: "https://research.google/blog/"
     schedule: "0 11 * * 1"
     fetcher_type: "Fetcher"
     proxy_required: true

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <entry>
+    <id>http://arxiv.org/abs/2606.00001v1</id>
+    <title>Test Paper on AI Agents</title>
+    <summary>This paper studies AI agents, tool use, and reasoning benchmarks.</summary>
+    <published>2026-06-07T00:00:00Z</published>
+    <author><name>Ada Researcher</name></author>
+    <category term="cs.AI"/>
+    <category term="cs.LG"/>
+    <link title="pdf" href="http://arxiv.org/pdf/2606.00001v1"/>
+  </entry>
+</feed>

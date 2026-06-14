@@ -7,17 +7,24 @@ build/
 .venv/
 venv/
 
+# Node
+node_modules/
+
 # Project-specific
-.qoder/
 knowledge_base/by_source/
 knowledge_base/by_topic/
 knowledge_base/by_time/
 knowledge_base/index/
 knowledge_base/metadata/
+knowledge_base/exports/
 logs/
+.pytest_cache/
+**/__pycache__/
 
 # Secrets
 .env
+.env.*
+!.env.example
 *.key
 *.pem
 

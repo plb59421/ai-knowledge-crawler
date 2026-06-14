@@ -7,9 +7,6 @@ from src.utils.logger import get_logger
 
 logger = get_logger("crawler.anthropic")
 
-ANTHROPIC_RESEARCH_URL = "https://www.anthropic.com/research"
-
-
 class AnthropicCrawler(BaseCrawler):
     """Anthropic Research 爬虫，静态 HTML"""
 
@@ -18,16 +15,17 @@ class AnthropicCrawler(BaseCrawler):
     proxy_required = True
     rate_limit_seconds = 2.0
     max_pages = 5
+    base_url = "https://www.anthropic.com/research"
 
     def crawl(self) -> list[CrawlResult]:
         """爬取 Anthropic Research 列表页，获取文章链接并逐篇爬取"""
-        logger.info(f"[anthropic] start crawling: {ANTHROPIC_RESEARCH_URL}")
+        logger.info(f"[anthropic] start crawling: {self.base_url}")
 
         fetcher = self.get_fetcher()
 
         # 1. 获取列表页
         try:
-            response = fetcher.get(ANTHROPIC_RESEARCH_URL)
+            response = fetcher.get(self.base_url)
         except Exception as e:
             logger.error(f"[anthropic] failed to fetch listing page: {e}")
             return []
@@ -39,7 +37,12 @@ class AnthropicCrawler(BaseCrawler):
         article_links = []
         for link in page.css("a[href]"):
             href = link.attrib.get("href", "")
-            if href and "/research/" in href and href != "/research":
+            if (
+                href
+                and "/research/" in href
+                and href != "/research"
+                and "/research/team/" not in href
+            ):
                 full_url = f"https://www.anthropic.com{href}" if href.startswith("/") else href
                 if full_url not in article_links:
                     article_links.append(full_url)

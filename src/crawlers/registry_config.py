@@ -15,6 +15,20 @@ from src.crawlers.arxiv.crawler import ArXivCrawler
 from src.crawlers.arxiv.parser import ArXivParser
 from src.crawlers.qbitai.crawler import QbitAICrawler
 from src.crawlers.qbitai.parser import QbitAIParser
+from src.crawlers.hf_daily_papers.crawler import HFDailyPapersCrawler
+from src.crawlers.hf_daily_papers.parser import HFDailyPapersParser
+from src.crawlers.semantic_scholar.crawler import SemanticScholarCrawler
+from src.crawlers.semantic_scholar.parser import SemanticScholarParser
+from src.crawlers.openalex.crawler import OpenAlexCrawler
+from src.crawlers.openalex.parser import OpenAlexParser
+from src.crawlers.the_gradient.crawler import TheGradientCrawler
+from src.crawlers.the_gradient.parser import TheGradientParser
+from src.crawlers.baai_hub.crawler import BAAIHubCrawler
+from src.crawlers.baai_hub.parser import BAAIHubParser
+from src.crawlers.google_ai.crawler import GoogleAICrawler
+from src.crawlers.google_ai.parser import GoogleAIParser
+from src.crawlers.meta_ai.crawler import MetaAICrawler
+from src.crawlers.meta_ai.parser import MetaAIParser
 
 
 def register_all():
@@ -26,6 +40,13 @@ def register_all():
     CrawlerRegistry.register("deepmind", DeepMindCrawler, DeepMindParser)
     CrawlerRegistry.register("arxiv", ArXivCrawler, ArXivParser)
     CrawlerRegistry.register("qbitai", QbitAICrawler, QbitAIParser)
+    CrawlerRegistry.register("hf_daily_papers", HFDailyPapersCrawler, HFDailyPapersParser)
+    CrawlerRegistry.register("semantic_scholar", SemanticScholarCrawler, SemanticScholarParser)
+    CrawlerRegistry.register("openalex", OpenAlexCrawler, OpenAlexParser)
+    CrawlerRegistry.register("the_gradient", TheGradientCrawler, TheGradientParser)
+    CrawlerRegistry.register("baai_hub", BAAIHubCrawler, BAAIHubParser)
+    CrawlerRegistry.register("google_ai", GoogleAICrawler, GoogleAIParser)
+    CrawlerRegistry.register("meta_ai", MetaAICrawler, MetaAIParser)
 
 
 # 模块导入时自动注册

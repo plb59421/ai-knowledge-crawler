@@ -8,7 +8,6 @@ from src.utils.logger import get_logger
 
 logger = get_logger("crawler.arxiv")
 
-ARXIV_API_URL = "https://export.arxiv.org/api/query"
 # AI 相关分类
 ARXIV_CATEGORIES = ["cs.AI", "cs.CL", "cs.LG", "cs.CV", "cs.NE"]
 
@@ -21,11 +20,13 @@ class ArXivCrawler(BaseCrawler):
     proxy_required = False    # ArXiv API 国内可达
     rate_limit_seconds = 3.0
     max_pages = 10
+    base_url = "https://export.arxiv.org/api/query"
 
     def crawl(self) -> list[CrawlResult]:
         """通过 ArXiv API 爬取最近 AI 论文元数据"""
         # 构建查询参数
-        cat_query = " OR ".join(f"cat:{c}" for c in ARXIV_CATEGORIES)
+        categories = self.config.get("categories", ARXIV_CATEGORIES)
+        cat_query = " OR ".join(f"cat:{c}" for c in categories)
         params = {
             "search_query": cat_query,
             "sortBy": "submittedDate",
@@ -37,7 +38,7 @@ class ArXivCrawler(BaseCrawler):
 
         # 用 requests 直接调用 API（比 scrapling Fetcher 更可靠）
         try:
-            response = requests.get(ARXIV_API_URL, params=params, timeout=30)
+            response = requests.get(self.base_url, params=params, timeout=30)
             response.raise_for_status()
         except Exception as e:
             logger.error(f"[arxiv] failed to fetch API: {e}")

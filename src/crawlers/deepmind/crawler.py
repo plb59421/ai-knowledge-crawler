@@ -8,9 +8,6 @@ from src.utils.logger import get_logger
 
 logger = get_logger("crawler.deepmind")
 
-DEEPMIND_BLOG_URL = "https://deepmind.google/blog/"
-
-
 class DeepMindCrawler(BaseCrawler):
     """DeepMind Blog 爬虫，Fetcher主选 + StealthyFetcher后备"""
 
@@ -19,26 +16,27 @@ class DeepMindCrawler(BaseCrawler):
     proxy_required = True
     rate_limit_seconds = 2.0
     max_pages = 5
+    base_url = "https://deepmind.google/blog/"
 
     def crawl(self) -> list[CrawlResult]:
         """爬取 DeepMind Blog 列表页，获取文章链接并逐篇爬取"""
-        logger.info(f"[deepmind] start crawling: {DEEPMIND_BLOG_URL}")
+        logger.info(f"[deepmind] start crawling: {self.base_url}")
 
         # 1. 尝试 Fetcher，失败则切换 StealthyFetcher
         response = None
         fetcher_used = "Fetcher"
         try:
             fetcher = self.get_fetcher("Fetcher")
-            response = fetcher.get(DEEPMIND_BLOG_URL)
+            response = fetcher.get(self.base_url)
         except Exception as e:
             logger.warning(f"[deepmind] Fetcher failed: {e}, switching to StealthyFetcher")
             try:
                 stealthy = self.get_fetcher("StealthyFetcher")
-                response = stealthy.get(DEEPMIND_BLOG_URL)
+                response = stealthy.get(self.base_url)
                 fetcher_used = "StealthyFetcher"
             except Exception as e2:
                 logger.error(f"[deepmind] StealthyFetcher also failed: {e2}")
-                raise CrawlError("Failed to fetch DeepMind blog", source="deepmind", url=DEEPMIND_BLOG_URL)
+                raise CrawlError("Failed to fetch DeepMind blog", source="deepmind", url=self.base_url)
 
         # 2. 用 Selector 解析提取文章链接
         raw_html = response.html_content if hasattr(response, 'html_content') else ""
@@ -49,7 +47,7 @@ class DeepMindCrawler(BaseCrawler):
             href = link.attrib.get("href", "")
             if href and "/blog/" in href and href != "/blog/":
                 full_url = f"https://deepmind.google{href}" if href.startswith("/") else href
-                if full_url != DEEPMIND_BLOG_URL and full_url not in article_links:
+                if full_url != self.base_url and full_url not in article_links:
                     article_links.append(full_url)
 
         logger.info(f"[deepmind] found {len(article_links)} blog articles")

@@ -1,6 +1,8 @@
 """ArXiv 论文内容解析器 - 从 API XML 数据解析为 Article"""
 
 from src.core.models import Article
+from src.crawlers.arxiv.pdf_extractor import PDFExtractor
+from src.utils.config_loader import get_source_config
 from src.utils.logger import get_logger
 
 logger = get_logger("parser.arxiv")
@@ -8,6 +10,10 @@ logger = get_logger("parser.arxiv")
 
 class ArXivParser:
     """解析 ArXiv API 返回的论文元数据"""
+
+    def __init__(self, pdf_extractor: PDFExtractor = None):
+        self.config = get_source_config("arxiv")
+        self.pdf_extractor = pdf_extractor or PDFExtractor()
 
     def parse(self, crawl_result) -> list[Article]:
         url = crawl_result.url
@@ -22,6 +28,12 @@ class ArXivParser:
             authors = raw_json.get("authors", [])
             categories = raw_json.get("categories", [])
             pdf_url = raw_json.get("pdf_url", "")
+            full_text = summary
+
+            if self.config.get("pdf_download") and pdf_url:
+                extracted = self.pdf_extractor.extract(pdf_url, arxiv_id)
+                if extracted:
+                    full_text = extracted
 
             article_id = f"arx_{arxiv_id}"
 
@@ -32,7 +44,7 @@ class ArXivParser:
                 source="arxiv",
                 title=title,
                 abstract=summary[:300],
-                full_text=summary,  # API 只返回 summary，PDF全文需单独下载
+                full_text=full_text,
                 authors=authors,
                 publish_date=published[:10] if published else "",  # 截取日期部分
                 url=f"https://arxiv.org/abs/{arxiv_id}",

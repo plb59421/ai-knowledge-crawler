@@ -23,13 +23,13 @@ class JiqiZhixinParser:
                 title = el.get_text(strip=True)
                 break
         if not title:
-            title = url.split("/")[-1]
+            title = crawl_result.metadata.get("title") or url.split("/")[-1]
 
         content_parts = []
-        for sel in ["div.article-content p", "div.prose p", ".post-content p"]:
+        for sel in ["div.article-content p", "div.prose p", ".post-content p", "main p", "p"]:
             for p in soup.select(sel):
                 text = p.get_text(strip=True)
-                if text and len(text) > 20:
+                if text and len(text) > 20 and text not in content_parts:
                     content_parts.append(text)
             if content_parts:
                 break

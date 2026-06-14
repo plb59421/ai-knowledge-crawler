@@ -7,9 +7,6 @@ from src.utils.logger import get_logger
 
 logger = get_logger("crawler.huggingface")
 
-HUGGINGFACE_BLOG_URL = "https://huggingface.co/blog"
-
-
 class HuggingFaceCrawler(BaseCrawler):
     """HuggingFace Blog 爬虫，使用 Fetcher 爬取静态 HTML"""
 
@@ -18,24 +15,30 @@ class HuggingFaceCrawler(BaseCrawler):
     proxy_required = True
     rate_limit_seconds = 1.0
     max_pages = 5
+    base_url = "https://huggingface.co/blog"
 
     def crawl(self) -> list[CrawlResult]:
         """爬取 HuggingFace Blog 页面"""
-        logger.info(f"[huggingface] start crawling: {HUGGINGFACE_BLOG_URL}")
+        logger.info(f"[huggingface] start crawling: {self.base_url}")
 
         fetcher = self.get_fetcher()
-        response = fetcher.get(HUGGINGFACE_BLOG_URL)
+        response = fetcher.get(self.base_url)
 
         # 用 Selector 解析提取文章链接
         raw_html = response.html_content if hasattr(response, 'html_content') else ""
         page = Selector(raw_html)
 
         blog_links = []
+        ignored_paths = {
+            "/blog/community",
+        }
         for link in page.css("a[href]"):
             href = link.attrib.get("href", "")
-            if href and "/blog/" in href and href != "/blog":
+            path = href.split("?", 1)[0].rstrip("/")
+            if href and "/blog/" in href and href != "/blog" and path not in ignored_paths:
                 full_url = f"https://huggingface.co{href}" if href.startswith("/") else href
-                blog_links.append(full_url)
+                if full_url not in blog_links:
+                    blog_links.append(full_url)
 
         logger.info(f"[huggingface] found {len(blog_links)} blog links on listing page")
 

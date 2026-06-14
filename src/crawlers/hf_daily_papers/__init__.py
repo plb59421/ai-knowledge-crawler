@@ -1,0 +1,1 @@
+"""HuggingFace Daily Papers crawler."""

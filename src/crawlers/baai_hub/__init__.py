@@ -1,0 +1,1 @@
+"""BAAI Hub crawler."""

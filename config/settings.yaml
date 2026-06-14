@@ -13,6 +13,8 @@ defaults:
   default_relevance_threshold: 6.0
 
 llm:
-  provider: openai
-  model: gpt-4o
-  api_key_env: LLM_API_KEY
+  provider: qwen
+  model: qwen-plus
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+  api_key_env: DASHSCOPE_API_KEY
+  timeout: 60

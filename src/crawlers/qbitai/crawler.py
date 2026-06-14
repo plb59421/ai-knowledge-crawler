@@ -7,9 +7,6 @@ from src.utils.logger import get_logger
 
 logger = get_logger("crawler.qbitai")
 
-QBITAI_URL = "https://www.qbitai.com/"
-
-
 class QbitAICrawler(BaseCrawler):
     """量子位爬虫，WordPress 系站点，静态 HTML"""
 
@@ -18,15 +15,16 @@ class QbitAICrawler(BaseCrawler):
     proxy_required = False
     rate_limit_seconds = 2.0
     max_pages = 5
+    base_url = "https://www.qbitai.com/"
 
     def crawl(self) -> list[CrawlResult]:
         """爬取量子位主页，获取最新文章链接"""
-        logger.info(f"[qbitai] start crawling: {QBITAI_URL}")
+        logger.info(f"[qbitai] start crawling: {self.base_url}")
 
         fetcher = self.get_fetcher()
 
         try:
-            response = fetcher.get(QBITAI_URL)
+            response = fetcher.get(self.base_url)
         except Exception as e:
             logger.error(f"[qbitai] failed to fetch homepage: {e}")
             return []

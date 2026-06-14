@@ -1,0 +1,188 @@
+body {
+  margin: 0;
+  background: #f7f8fa;
+  color: #1f2933;
+  font-family: Arial, "Microsoft YaHei", sans-serif;
+  line-height: 1.6;
+}
+
+main {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+h1 {
+  font-size: 28px;
+  margin: 0 0 8px;
+}
+
+h2 {
+  font-size: 22px;
+  margin: 28px 0 16px;
+}
+
+.hero p,
+.meta,
+.empty {
+  color: #667085;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 18px;
+}
+
+.stats span {
+  background: #fff;
+  border: 1px solid #d9dee7;
+  border-radius: 4px;
+  color: #475467;
+  padding: 4px 8px;
+}
+
+.tabs {
+  background: #f7f8fa;
+  display: flex;
+  gap: 8px;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.tabs button {
+  background: #fff;
+  border: 1px solid #b8c4d6;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 8px 14px;
+}
+
+.tabs button.active {
+  background: #102a43;
+  color: #fff;
+}
+
+.hidden {
+  display: none;
+}
+
+.card,
+.error {
+  background: white;
+  border: 1px solid #d9dee7;
+  border-radius: 8px;
+  margin: 14px 0;
+  padding: 18px;
+}
+
+.card-head {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.rank {
+  color: #475467;
+  font-weight: 700;
+}
+
+.score {
+  background: #102a43;
+  border-radius: 4px;
+  color: white;
+  font-weight: 700;
+  padding: 2px 8px;
+}
+
+.freshness {
+  background: #ecfdf3;
+  border-radius: 4px;
+  color: #027a48;
+  font-size: 13px;
+  padding: 2px 8px;
+}
+
+.freshness.expired {
+  background: #fff1f3;
+  color: #c01048;
+}
+
+h3 {
+  font-size: 19px;
+  margin: 10px 0 4px;
+}
+
+a {
+  color: #0b5cad;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.tags {
+  margin: 8px 0;
+}
+
+.tag-label {
+  color: #344054;
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+.tag {
+  background: #eef4ff;
+  border-radius: 4px;
+  color: #1849a9;
+  display: inline-block;
+  font-size: 13px;
+  margin: 2px 4px 2px 0;
+  padding: 2px 7px;
+}
+
+.summary {
+  background: #f8fbff;
+  border-left: 3px solid #2e90fa;
+  margin: 12px 0;
+  padding: 10px 12px;
+}
+
+.summary p {
+  margin: 4px 0;
+}
+
+.summary ul {
+  margin: 6px 0 0 18px;
+  padding: 0;
+}
+
+.abstract {
+  margin-top: 10px;
+}
+
+.reason {
+  color: #475467;
+}
+
+.source-link {
+  font-weight: 700;
+}
+
+details {
+  margin-top: 10px;
+}
+
+summary {
+  color: #1849a9;
+  cursor: pointer;
+}
+
+li {
+  font-size: 14px;
+}

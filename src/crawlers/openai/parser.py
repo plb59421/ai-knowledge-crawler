@@ -24,9 +24,9 @@ class OpenAIParser:
             title = url.split("/")[-1]
 
         content_parts = []
-        for p in soup.select("div.prose p, article p, .post-content p"):
+        for p in soup.select("main p, article p, div.prose p, .post-content p, p"):
             text = p.get_text(strip=True)
-            if text:
+            if text and len(text) > 20 and text not in content_parts:
                 content_parts.append(text)
 
         date = ""
@@ -36,7 +36,8 @@ class OpenAIParser:
 
         abstract = content_parts[0][:300] if content_parts else ""
         full_text = "\n".join(content_parts)
-        article_id = f"oai_{url.split('/')[-1]}"
+        slug = url.rstrip("/").split("/")[-1] or abs(hash(url))
+        article_id = f"oai_{slug}"
 
         logger.info(f"[openai] parsed: {title[:50]} ({len(content_parts)} paragraphs)")
 
