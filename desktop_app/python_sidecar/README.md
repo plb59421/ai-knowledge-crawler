@@ -15,7 +15,21 @@
 - 不在本目录保存真实用户配置或知识库。
 - 打包产物输出到 `desktop_app/build/` 或本目录下的忽略目录。
 
-当前 `desktop_server.py` 和 `pyinstaller.spec` 仅为占位文件，尚未实现真实打包逻辑。
+### 启动方式
+
+```powershell
+python desktop_app/python_sidecar/desktop_server.py
+```
+
+可选参数：
+
+```powershell
+python desktop_app/python_sidecar/desktop_server.py --host 127.0.0.1 --port 8000 --no-browser
+```
+
+`desktop_server.py` 会复用现有 `/api/report`、`/api/health` 等 API，并在根路径 `/` 托管 `knowledge_base/exports/app` 中的前端构建产物。
+
+`pyinstaller.spec` 已提供基础打包配置，后续安装 PyInstaller 后可继续完善生成 sidecar 可执行文件。
 
 ---
 
@@ -30,4 +44,18 @@ This directory stores the future desktop Python sidecar entry point and PyInstal
 - Do not store real user config or knowledge base data here.
 - Build artifacts should go to `desktop_app/build/` or ignored directories under this workspace.
 
-Current `desktop_server.py` and `pyinstaller.spec` are placeholders only. Real packaging logic is not implemented yet.
+### Run
+
+```powershell
+python desktop_app/python_sidecar/desktop_server.py
+```
+
+Optional arguments:
+
+```powershell
+python desktop_app/python_sidecar/desktop_server.py --host 127.0.0.1 --port 8000 --no-browser
+```
+
+`desktop_server.py` reuses existing APIs such as `/api/report` and `/api/health`, and serves the frontend build output from `knowledge_base/exports/app` at `/`.
+
+`pyinstaller.spec` provides a basic packaging configuration that can be refined after PyInstaller is installed.

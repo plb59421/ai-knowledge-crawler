@@ -29,7 +29,20 @@ desktop_app/
 
 ### 当前状态
 
-本目录目前只建立隔离骨架和文档边界，尚未实现 Tauri 或 PyInstaller 打包逻辑。
+本目录已经包含可运行的 Python desktop sidecar：
+
+```powershell
+python desktop_app/python_sidecar/desktop_server.py
+```
+
+它会启动本地 API、托管已构建的前端页面，并自动打开浏览器。如果前端尚未构建，请先执行：
+
+```powershell
+cd web/report
+npm.cmd run build
+```
+
+Tauri 桌面壳已提供最小工程配置，但本机需要安装 Rust/Cargo 后才能继续构建原生窗口应用。
 
 ---
 
@@ -58,4 +71,17 @@ desktop_app/
 
 ### Current Status
 
-This directory currently provides the isolated skeleton and documentation boundary only. Tauri and PyInstaller packaging logic is not implemented yet.
+This directory now includes a runnable Python desktop sidecar:
+
+```powershell
+python desktop_app/python_sidecar/desktop_server.py
+```
+
+It starts the local API, serves the built frontend, and opens the browser automatically. If the frontend has not been built yet, run:
+
+```powershell
+cd web/report
+npm.cmd run build
+```
+
+A minimal Tauri shell is present, but Rust/Cargo must be installed before building the native desktop window.

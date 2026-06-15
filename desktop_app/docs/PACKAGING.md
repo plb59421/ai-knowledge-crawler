@@ -6,7 +6,7 @@
 
 ## 中文
 
-本文记录桌面应用打包方向。当前只作为设计约束，不代表打包流程已经实现。
+本文记录桌面应用打包方向。当前 Python sidecar 已可运行，Tauri 安装包构建仍需要安装 Rust/Cargo 和 Tauri CLI 后继续验证。
 
 ### 目标形态
 
@@ -23,8 +23,8 @@
 
 ### 后续实现步骤
 
-1. 添加 Tauri 工程配置。
-2. 添加 Python sidecar 的真实启动入口和 PyInstaller spec。
+1. 完善 PyInstaller sidecar 构建并生成可执行文件。
+2. 将 sidecar 接入 Tauri 外部二进制或启动流程。
 3. 配置用户数据目录中的配置、知识库和日志路径。
 4. 实现设置页、任务页和日志页。
 5. 构建 Windows 安装包并验证升级不覆盖用户数据。
@@ -33,7 +33,7 @@
 
 ## English
 
-This document records the desktop packaging direction. It is currently a design constraint, not an implemented packaging pipeline.
+This document records the desktop packaging direction. The Python sidecar is runnable now; Tauri installer builds still require Rust/Cargo and the Tauri CLI.
 
 ### Target Shape
 
@@ -50,8 +50,8 @@ This document records the desktop packaging direction. It is currently a design 
 
 ### Future Implementation Steps
 
-1. Add Tauri project configuration.
-2. Add the real Python sidecar entry point and PyInstaller spec.
+1. Complete the PyInstaller sidecar build and generate an executable.
+2. Wire the sidecar into Tauri as an external binary or startup flow.
 3. Configure user-data paths for config, knowledge base, and logs.
 4. Implement settings, tasks, and logs pages.
 5. Build the Windows installer and verify upgrades do not overwrite user data.
